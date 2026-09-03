@@ -1,0 +1,11 @@
+{
+  "name": "deploy-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Autoevaluación interactiva de las primeras cuatro clases de Diseño y Arquitectura de Despliegue 1.",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test"
+  }
+}

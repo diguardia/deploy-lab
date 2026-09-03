@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diagnóstico interactivo sobre despliegue, Node.js, npm, JSON y Express.">
+    <meta name="theme-color" content="#0b1020">
+    <title>Deploy Lab · Diagnóstico</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <div class="app-shell">
+      <header class="app-header">
+        <a class="brand" href="./" aria-label="Deploy Lab, inicio">
+          <span class="brand-mark" aria-hidden="true">&gt;_</span>
+          <span>Deploy Lab</span>
+        </a>
+        <div class="header-meta">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Autoevaluación · Clases 1–4</span>
+        </div>
+      </header>
+
+      <main id="main">
+        <section id="welcome-screen" class="screen welcome-screen">
+          <div class="hero-copy">
+            <p class="eyebrow">Diagnóstico de conocimientos</p>
+            <h1>¿Está listo tu entorno para desplegar?</h1>
+            <p class="lead">Resolvé misiones breves en una consola simulada. Podés equivocarte, pedir pistas y volver a probar: el objetivo es descubrir qué ya dominás y qué conviene repasar.</p>
+
+            <div class="mission-stats" aria-label="Características del diagnóstico">
+              <div><strong>16</strong><span>desafíos</span></div>
+              <div><strong>4</strong><span>temas</span></div>
+              <div><strong>20'</strong><span>aprox.</span></div>
+            </div>
+
+            <div class="welcome-actions">
+              <button class="button button-primary" id="start-button" type="button">Iniciar diagnóstico <span aria-hidden="true">→</span></button>
+              <button class="button button-quiet" id="resume-button" type="button" hidden>Continuar intento</button>
+            </div>
+            <p class="privacy-note">Tus respuestas quedan solamente en este navegador. No se solicita nombre ni se envían datos.</p>
+          </div>
+
+          <aside class="syllabus-panel" aria-labelledby="syllabus-title">
+            <div class="panel-heading">
+              <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span id="syllabus-title">contenido_del_diagnóstico.json</span>
+            </div>
+            <ol class="topic-list">
+              <li><span>01</span><div><strong>Entornos y despliegue</strong><small>desarrollo · preview · producción</small></div></li>
+              <li><span>02</span><div><strong>Reglas y JSON</strong><small>estado · jugadas · contrato</small></div></li>
+              <li><span>03</span><div><strong>Node.js y npm</strong><small>dependencias · lockfile · scripts</small></div></li>
+              <li><span>04</span><div><strong>HTTP y Express</strong><small>POST /move · validación · estrategia</small></div></li>
+            </ol>
+          </aside>
+        </section>
+
+        <section id="quiz-screen" class="screen quiz-screen" hidden>
+          <header class="quiz-header">
+            <div>
+              <p class="eyebrow" id="question-topic">Tema</p>
+              <p class="progress-copy"><span id="question-position">Desafío 1 de 16</span><span id="score-copy">0 puntos</span></p>
+            </div>
+            <button class="icon-button" id="exit-button" type="button" aria-label="Salir y guardar el progreso">×</button>
+          </header>
+          <div class="progress-track" role="progressbar" aria-label="Progreso del diagnóstico" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0">
+            <span id="progress-fill"></span>
+          </div>
+
+          <div class="question-layout">
+            <section class="question-card" aria-labelledby="question-title">
+              <p class="mission-label" id="question-mission">Misión</p>
+              <h2 id="question-title">Título del desafío</h2>
+              <p class="question-prompt" id="question-prompt"></p>
+              <div id="answer-area"></div>
+              <div id="feedback" class="feedback" aria-live="polite"></div>
+              <div class="question-actions">
+                <button class="button button-primary" id="check-button" type="button">Comprobar</button>
+                <button class="button button-secondary" id="hint-button" type="button">Pedir pista</button>
+                <button class="button button-quiet" id="reveal-button" type="button" hidden>Ver respuesta</button>
+                <button class="button button-primary next-button" id="next-button" type="button" hidden>Siguiente <span aria-hidden="true">→</span></button>
+              </div>
+            </section>
+
+            <aside class="context-panel" aria-label="Contexto de ejecución">
+              <div class="panel-heading">
+                <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span id="console-title">terminal</span>
+              </div>
+              <pre id="console-output" tabindex="0"></pre>
+            </aside>
+          </div>
+        </section>
+
+        <section id="results-screen" class="screen results-screen" hidden>
+          <div class="results-heading">
+            <p class="eyebrow">Diagnóstico completo</p>
+            <h1 id="result-title">Resultado</h1>
+            <p class="lead" id="result-summary"></p>
+          </div>
+
+          <div class="result-grid">
+            <section class="result-score" aria-label="Puntaje total">
+              <div class="score-ring" id="score-ring"><strong id="total-percent">0%</strong><span>dominio global</span></div>
+              <p id="score-detail"></p>
+            </section>
+            <section class="topic-results" aria-labelledby="topic-results-title">
+              <h2 id="topic-results-title">Resultado por tema</h2>
+              <div id="topic-bars"></div>
+            </section>
+          </div>
+
+          <section class="recommendations" aria-labelledby="recommendations-title">
+            <p class="mission-label">Tu próxima misión</p>
+            <h2 id="recommendations-title">Qué conviene practicar ahora</h2>
+            <div id="recommendation-list"></div>
+          </section>
+
+          <div class="results-actions">
+            <button class="button button-primary" id="retry-weak-button" type="button">Practicar temas débiles</button>
+            <button class="button button-secondary" id="restart-button" type="button">Reiniciar todo</button>
+            <button class="button button-quiet" id="print-button" type="button">Imprimir resultado</button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>Diseño y Arquitectura de Despliegue 1 · 2026</span>
+        <span>Aprender es probar, leer el error y volver a intentar.</span>
+      </footer>
+    </div>
+
+    <script type="module" src="./app.mjs"></script>
+  </body>
+</html>
