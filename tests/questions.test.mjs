@@ -3,10 +3,14 @@ import assert from "node:assert/strict";
 import { questions, topics } from "../questions.mjs";
 import { normalizeText, validateJsonAnswer } from "../validation.mjs";
 
-test("el diagnóstico tiene cuatro desafíos por tema", () => {
+test("el diagnóstico tiene seis desafíos por tema", () => {
   for (const topicId of Object.keys(topics)) {
-    assert.equal(questions.filter((question) => question.topic === topicId).length, 4);
+    assert.equal(questions.filter((question) => question.topic === topicId).length, 6);
   }
+});
+
+test("el diagnóstico contiene 24 desafíos", () => {
+  assert.equal(questions.length, 24);
 });
 
 test("el JSON acepta espacios, tabs y saltos de línea CRLF", () => {

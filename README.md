@@ -20,7 +20,7 @@ npm test
 
 ## Cómo funciona
 
-- Presenta 16 desafíos, cuatro por eje temático.
+- Presenta 24 desafíos, seis por eje temático.
 - Combina consola simulada, opciones, edición de JSON y ordenamiento de pasos.
 - Otorga 2 puntos por un acierto inicial, 1 con ayuda y 0 al revelar la respuesta.
 - Guarda el avance únicamente en `localStorage` del navegador.

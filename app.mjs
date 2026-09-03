@@ -1,7 +1,7 @@
 import { questions, topics } from "./questions.mjs";
 import { normalizeText, validateJsonAnswer } from "./validation.mjs";
 
-const storageKey = "deploy-lab-progress-v1";
+const storageKey = "deploy-lab-progress-v2";
 const maxPointsPerQuestion = 2;
 
 const elements = {

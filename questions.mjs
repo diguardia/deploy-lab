@@ -84,6 +84,39 @@ export const questions = [
     explanation: "El orden trabajado fue planificación, diseño, desarrollo, pruebas, despliegue y mantenimiento."
   },
   {
+    id: "deploy-git-role",
+    topic: "deployment",
+    type: "choice",
+    mission: "Elegir la herramienta",
+    title: "Necesitás conservar el historial del código",
+    prompt: "¿Qué herramienta del entorno local registra versiones, cambios y el historial del proyecto?",
+    consoleTitle: "tool-check.log",
+    console: "Requisitos del equipo:\n  ✓ comparar cambios\n  ✓ recuperar versiones anteriores\n  ✓ mantener un historial de trabajo\n\nHerramienta pendiente: ???",
+    options: ["Node.js", "npm", "Git", "VS Code"],
+    answer: "Git",
+    hint: "No ejecuta JavaScript ni instala paquetes; se ocupa de las versiones del proyecto.",
+    explanation: "Git registra cambios e historial del código. Node.js ejecuta JavaScript, npm gestiona paquetes y VS Code es el editor."
+  },
+  {
+    id: "deploy-production",
+    topic: "deployment",
+    type: "choice",
+    mission: "Reconocer producción",
+    title: "La aplicación ya recibe tráfico real",
+    prompt: "¿Qué combinación describe mejor las necesidades del entorno de producción?",
+    consoleTitle: "environment.log",
+    console: "usuarios_activos=184\nsolicitudes_por_minuto=920\nservicio_disponible=true\n\nEste entorno ya está siendo utilizado por personas reales.",
+    options: [
+      "Cambios rápidos sin controles ni monitoreo",
+      "Alta disponibilidad, monitoreo y cambios probados",
+      "Una copia personal para cada programador",
+      "Una versión candidata sin usuarios reales"
+    ],
+    answer: "Alta disponibilidad, monitoreo y cambios probados",
+    hint: "Un fallo aquí afecta directamente a los usuarios finales.",
+    explanation: "Producción requiere disponibilidad y monitoreo; sus cambios deben estar probados y controlados porque existe tráfico real."
+  },
+  {
     id: "model-move-contract",
     topic: "modeling",
     type: "choice",
@@ -143,6 +176,46 @@ export const questions = [
     answer: "El árbitro o motor",
     hint: "Es el componente que pasa los turnos, evita trampas y ejecuta jugadas válidas.",
     explanation: "El bot propone una jugada; el árbitro o motor controla las reglas, la valida y recién entonces modifica el estado."
+  },
+  {
+    id: "model-orthogonal-move",
+    topic: "modeling",
+    type: "choice",
+    mission: "Validar un movimiento",
+    title: "La pieza está en la posición (4, 4)",
+    prompt: "Si cada turno permite mover una casilla en forma ortogonal, ¿cuál de estos destinos representa una jugada válida?",
+    consoleTitle: "board-state.json",
+    console: "{\n  \"pieceId\": \"A1\",\n  \"row\": 4,\n  \"column\": 4\n}\n\nSolo se permite una casilla hacia N, S, E u O.",
+    options: ["(5, 5)", "(4, 6)", "(4, 5)", "(4, 4)"],
+    answer: "(4, 5)",
+    hint: "Una coordenada debe cambiar exactamente en una unidad y la otra debe permanecer igual.",
+    explanation: "Pasar de (4, 4) a (4, 5) cambia una sola coordenada en una unidad: es un movimiento ortogonal de una casilla."
+  },
+  {
+    id: "model-turn-flow",
+    topic: "modeling",
+    type: "sequence",
+    mission: "Coordinar un turno",
+    title: "Ordená el trabajo del árbitro y el bot",
+    prompt: "Ubicá los pasos desde que comienza un turno hasta que el juego puede continuar con el siguiente.",
+    consoleTitle: "turn-trace.log",
+    console: "turn=17\nactivePlayer=A\nstatus=waiting_for_move\n\nEl árbitro todavía no recibió una decisión.",
+    items: [
+      "El árbitro entrega el estado al bot",
+      "El bot devuelve pieza y dirección",
+      "El árbitro valida la jugada",
+      "El árbitro ejecuta la jugada",
+      "El árbitro pasa al siguiente turno"
+    ],
+    shuffled: [
+      "El árbitro valida la jugada",
+      "El árbitro pasa al siguiente turno",
+      "El bot devuelve pieza y dirección",
+      "El árbitro entrega el estado al bot",
+      "El árbitro ejecuta la jugada"
+    ],
+    hint: "El bot necesita conocer el estado antes de decidir; el árbitro siempre valida antes de ejecutar.",
+    explanation: "El árbitro entrega el estado, recibe la decisión del bot, la valida, la ejecuta y recién después pasa el turno."
   },
   {
     id: "npm-files",
@@ -211,6 +284,44 @@ export const questions = [
     explanation: "npm run diagnostico -- prueba ejecuta el script y reenvía lo que sigue a -- hacia process.argv."
   },
   {
+    id: "npm-dev-dependency",
+    topic: "npm",
+    type: "choice",
+    mission: "Clasificar una dependencia",
+    title: "Jest solo se usa durante las pruebas",
+    prompt: "La aplicación no necesita Jest para ejecutarse en producción. ¿Cómo debería agregarse al proyecto?",
+    consoleTitle: "package-plan.txt",
+    console: "paquete=jest\nuso=ejecutar pruebas durante el desarrollo\nrequerido_en_producción=false",
+    options: [
+      "npm install jest",
+      "npm install -D jest",
+      "npm start jest",
+      "Copiar Jest dentro de src/"
+    ],
+    answer: "npm install -D jest",
+    hint: "La opción abreviada indica que el paquete es necesario para desarrollar o probar, pero no para ejecutar la aplicación.",
+    explanation: "npm install -D jest lo registra en devDependencies, apropiado para herramientas usadas solo al desarrollar, probar o mantener."
+  },
+  {
+    id: "npm-tilde-range",
+    topic: "npm",
+    type: "choice",
+    mission: "Controlar las actualizaciones",
+    title: "Interpretá el rango ~5.1.0",
+    prompt: "¿Qué versiones puede aceptar npm para una dependencia declarada con este rango?",
+    consoleTitle: "package.json",
+    console: "{\n  \"dependencies\": {\n    \"example\": \"~5.1.0\"\n  }\n}",
+    options: [
+      "Solo 5.1.0",
+      "Versiones compatibles dentro de 5.1.x",
+      "Cualquier versión 5.x.x",
+      "Cualquier versión publicada"
+    ],
+    answer: "Versiones compatibles dentro de 5.1.x",
+    hint: "La tilde mantiene fijos tanto la versión mayor como el número menor.",
+    explanation: "~5.1.0 acepta actualizaciones de parche dentro de 5.1.x; es más restrictivo que ^5.1.0."
+  },
+  {
     id: "http-route",
     topic: "http",
     type: "terminal",
@@ -277,5 +388,38 @@ export const questions = [
     ],
     hint: "Primero llega la solicitud; la estrategia solo puede decidir después de interpretar y validar el estado.",
     explanation: "Express interpreta el body, el handler lo valida, la estrategia decide y res.json envía el movimiento al motor."
+  },
+  {
+    id: "http-deterministic",
+    topic: "http",
+    type: "choice",
+    mission: "Repetir una prueba",
+    title: "El mismo fixture se envía dos veces",
+    prompt: "¿Qué resultado demuestra que la estrategia del bot tiene un comportamiento determinista?",
+    consoleTitle: "fixture-run.log",
+    console: "fixture=state-01.json\nrun_1 → { pieceId: \"A1\", direction: \"N\" }\nrun_2 → ???",
+    options: [
+      "Devuelve siempre la misma respuesta para la misma entrada",
+      "Modifica el fixture después de cada ejecución",
+      "Devuelve una dirección aleatoria",
+      "Responde solamente durante el primer intento"
+    ],
+    answer: "Devuelve siempre la misma respuesta para la misma entrada",
+    hint: "Un fixture conocido permite comparar ejecuciones bajo exactamente las mismas condiciones.",
+    explanation: "Un comportamiento determinista produce la misma salida ante la misma entrada, lo que vuelve repetible la prueba."
+  },
+  {
+    id: "http-unexpected-error",
+    topic: "http",
+    type: "choice",
+    mission: "Clasificar un fallo",
+    title: "La estrategia lanzó un error inesperado",
+    prompt: "El body era válido, pero el servidor falló internamente mientras calculaba el movimiento. ¿Qué código corresponde?",
+    consoleTitle: "server-error.log",
+    console: "POST /move\nbody_validation=ok\nstrategy=failed\nerror=Unexpected exception",
+    options: ["200", "400", "404", "500"],
+    answer: "500",
+    hint: "La solicitud es válida; el problema ocurrió dentro del servidor.",
+    explanation: "500 comunica un error interno inesperado. 400 correspondería a un body o estado inválido enviado por el cliente."
   }
 ];
