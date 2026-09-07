@@ -1,7 +1,8 @@
-import { questions, topics } from "./questions.mjs";
+import { blocks } from "./blocks.mjs";
 import { normalizeText, validateJsonAnswer } from "./validation.mjs";
 
-const storageKey = "deploy-lab-progress-v2";
+let activeBlock = blocks[0];
+let { questions, topics, storageKey } = activeBlock;
 const maxPointsPerQuestion = 2;
 
 const elements = {
@@ -99,6 +100,28 @@ function resumeAttempt() {
 }
 
 function updateWelcome() {
+  document.querySelector("#block-select").value = activeBlock.id;
+  document.querySelector("#welcome-title").textContent = activeBlock.title;
+  document.querySelector("#welcome-description").textContent = activeBlock.description;
+  document.querySelector("#challenge-count").textContent = questions.length;
+  document.querySelector("#topic-count").textContent = Object.keys(topics).length;
+  document.querySelector("#duration").textContent = activeBlock.duration;
+  document.querySelector("#active-block-label").textContent = activeBlock.label;
+  const list = document.querySelector("#syllabus-list");
+  list.replaceChildren();
+  Object.values(topics).forEach((topic, index) => {
+    const item = document.createElement("li");
+    const number = document.createElement("span");
+    number.textContent = String(index + 1).padStart(2, "0");
+    const content = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = topic.label.replace(/^\d+\. /, "");
+    const detail = document.createElement("small");
+    detail.textContent = topic.review;
+    content.append(title, detail);
+    item.append(number, content);
+    list.append(item);
+  });
   const saved = loadSavedState();
   elements.resume.hidden = !saved;
   if (saved) elements.resume.textContent = saved.completed ? "Ver último resultado" : `Continuar intento · ${saved.index + 1}/${saved.questionIds.length}`;
@@ -113,6 +136,9 @@ function renderQuestion() {
   elements.mission.textContent = question.mission;
   elements.title.textContent = question.title;
   elements.prompt.textContent = question.prompt;
+  const lesson = document.querySelector("#question-lesson");
+  lesson.hidden = !question.lesson;
+  document.querySelector("#lesson-copy").textContent = question.lesson || "";
   elements.consoleTitle.textContent = question.consoleTitle;
   elements.console.textContent = question.console;
   elements.feedback.className = "feedback";
@@ -128,7 +154,7 @@ function renderQuestion() {
   if (alreadyAnswered) {
     const resultClass = state.points[question.id] > 0 ? "feedback-success" : "feedback-reveal";
     elements.feedback.classList.add(resultClass);
-    elements.feedback.innerHTML = `<strong>${state.points[question.id] > 0 ? "Resuelto." : "Respuesta revisada."}</strong><span>${question.explanation}</span>`;
+    showFeedback(question.explanation, state.points[question.id] > 0 ? "success" : "reveal", state.points[question.id] > 0 ? "Resuelto." : "Respuesta revisada.");
   }
 
   requestAnimationFrame(() => {
@@ -424,6 +450,7 @@ function retryWeakTopics() {
 }
 
 function exitQuiz() {
+  if (!elements.quiz.hidden) state.answers[currentQuestion().id] = readAnswer(currentQuestion());
   save();
   showScreen("welcome");
   updateWelcome();
@@ -442,5 +469,12 @@ elements.restart.addEventListener("click", () => {
   startAttempt(questions.map(({ id }) => id));
 });
 elements.print.addEventListener("click", () => window.print());
+document.querySelector("#blocks-button").addEventListener("click", exitQuiz);
+document.querySelector("#block-select").addEventListener("change", (event) => {
+  activeBlock = blocks.find(block => block.id === event.target.value);
+  ({ questions, topics, storageKey } = activeBlock);
+  state = freshState();
+  updateWelcome();
+});
 
 updateWelcome();

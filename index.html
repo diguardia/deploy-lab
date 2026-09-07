@@ -18,21 +18,26 @@
         </a>
         <div class="header-meta">
           <span class="status-dot" aria-hidden="true"></span>
-          <span>Autoevaluación · Clases 1–4</span>
+          <span id="active-block-label">Clases 1–4 · Fundamentos</span>
         </div>
       </header>
 
       <main id="main">
         <section id="welcome-screen" class="screen welcome-screen">
           <div class="hero-copy">
-            <p class="eyebrow">Diagnóstico de conocimientos</p>
-            <h1>¿Está listo tu entorno para desplegar?</h1>
-            <p class="lead">Resolvé misiones breves en una consola simulada. Podés equivocarte, pedir pistas y volver a probar: el objetivo es descubrir qué ya dominás y qué conviene repasar.</p>
+            <label class="eyebrow block-label" for="block-select">Elegí un bloque para practicar</label>
+            <select id="block-select" aria-describedby="block-note">
+              <option value="classes">Clases 1–4 · Fundamentos</option>
+              <option value="bot">Bot de casas · Leer y comprender el repo</option>
+            </select>
+            <p id="block-note" class="privacy-note">Cada bloque guarda su propio avance.</p>
+            <h1 id="welcome-title">¿Está listo tu entorno para desplegar?</h1>
+            <p class="lead" id="welcome-description">Resolvé misiones breves en una consola simulada.</p>
 
             <div class="mission-stats" aria-label="Características del diagnóstico">
-              <div><strong>24</strong><span>desafíos</span></div>
-              <div><strong>4</strong><span>temas</span></div>
-              <div><strong>30'</strong><span>aprox.</span></div>
+              <div><strong id="challenge-count">24</strong><span>desafíos</span></div>
+              <div><strong id="topic-count">4</strong><span>temas</span></div>
+              <div><strong id="duration">30′</strong><span>aprox.</span></div>
             </div>
 
             <div class="welcome-actions">
@@ -47,7 +52,7 @@
               <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
               <span id="syllabus-title">contenido_del_diagnóstico.json</span>
             </div>
-            <ol class="topic-list">
+            <ol class="topic-list" id="syllabus-list">
               <li><span>01</span><div><strong>Entornos y despliegue</strong><small>desarrollo · preview · producción</small></div></li>
               <li><span>02</span><div><strong>Reglas y JSON</strong><small>estado · jugadas · contrato</small></div></li>
               <li><span>03</span><div><strong>Node.js y npm</strong><small>dependencias · lockfile · scripts</small></div></li>
@@ -72,6 +77,7 @@
             <section class="question-card" aria-labelledby="question-title">
               <p class="mission-label" id="question-mission">Misión</p>
               <h2 id="question-title">Título del desafío</h2>
+              <aside id="question-lesson" class="lesson" hidden aria-label="Antes de resolver"><strong>Antes de resolver</strong><p id="lesson-copy"></p></aside>
               <p class="question-prompt" id="question-prompt"></p>
               <div id="answer-area"></div>
               <div id="feedback" class="feedback" aria-live="polite"></div>
@@ -119,7 +125,8 @@
 
           <div class="results-actions">
             <button class="button button-primary" id="retry-weak-button" type="button">Practicar temas débiles</button>
-            <button class="button button-secondary" id="restart-button" type="button">Reiniciar todo</button>
+            <button class="button button-secondary" id="restart-button" type="button">Reiniciar este bloque</button>
+            <button class="button button-secondary" id="blocks-button" type="button">Elegir otro bloque</button>
             <button class="button button-quiet" id="print-button" type="button">Imprimir resultado</button>
           </div>
         </section>

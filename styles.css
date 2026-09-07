@@ -34,7 +34,14 @@ body {
     var(--bg);
 }
 
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
+select:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.block-label { display: block; }
+#block-select { width: 100%; padding: 0.9rem; border: 1px solid var(--accent); border-radius: 0.75rem; background: var(--surface-raised); color: var(--text); }
+#block-note { margin: 0.65rem 0 2rem; }
+.lesson { padding: 1rem; margin-bottom: 1.2rem; border-left: 3px solid var(--blue); background: var(--surface-raised); border-radius: 0 0.6rem 0.6rem 0; line-height: 1.65; }
+.lesson strong { color: var(--blue); }
+.lesson p { margin: 0.4rem 0 0; }
 button { color: inherit; }
 
 button:focus-visible,
