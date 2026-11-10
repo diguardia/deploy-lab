@@ -25,6 +25,7 @@ npm test
 - **Vercel + GitHub Actions:** 50 desafíos en diez misiones sobre CI/CD, runners, artefactos, serverless, secrets, Preview/Production, observabilidad, seguridad, rollback y diagnóstico. Incluye rachas, hitos y celebraciones visuales.
 - El nuevo bloque incluye explicaciones previas, fragmentos del código y repeticiones con variaciones. No requiere ejecutar el bot ni conocer previamente TypeScript.
 - Combina consola simulada, opciones, edición de JSON y ordenamiento de pasos.
+- Mezcla las opciones de respuesta una vez por intento y conserva ese orden al recargar o continuar.
 - Otorga 2 puntos por un acierto inicial, 1 con ayuda y 0 al revelar la respuesta.
 - Guarda el avance de cada bloque por separado en `localStorage` del navegador.
 - Permite repetir solamente los temas con menos de 75% de dominio.

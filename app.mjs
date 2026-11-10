@@ -52,6 +52,7 @@ function freshState(questionIds = questions.map(({ id }) => id)) {
     attempts: {},
     hintUsed: {},
     points: {},
+    optionOrders: {},
     streak: 0,
     completed: false
   };
@@ -188,7 +189,8 @@ function renderAnswer(question, disabled) {
     group.className = "choice-list";
     group.setAttribute("role", "radiogroup");
     group.setAttribute("aria-label", "Opciones de respuesta");
-    question.options.forEach((option, optionIndex) => {
+    const options = choiceOptions(question);
+    options.forEach((option, optionIndex) => {
       const label = document.createElement("label");
       label.className = "choice-option";
       const input = document.createElement("input");
@@ -268,6 +270,25 @@ function renderAnswer(question, disabled) {
   }
   terminalInput.append(label, prompt, input);
   elements.answerArea.append(terminalInput);
+}
+
+function choiceOptions(question) {
+  const savedOrder = state.optionOrders?.[question.id];
+  if (Array.isArray(savedOrder)
+    && savedOrder.length === question.options.length
+    && savedOrder.every(option => question.options.includes(option))) {
+    return savedOrder;
+  }
+
+  const shuffled = [...question.options];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const target = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[target]] = [shuffled[target], shuffled[index]];
+  }
+  state.optionOrders ??= {};
+  state.optionOrders[question.id] = shuffled;
+  save();
+  return shuffled;
 }
 
 function moveSequenceItem(index, direction) {
