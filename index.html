@@ -29,6 +29,7 @@
             <select id="block-select" aria-describedby="block-note">
               <option value="classes">Clases 1–4 · Fundamentos</option>
               <option value="bot">Bot de casas · Leer y comprender el repo</option>
+              <option value="vercel">Vercel + GitHub Actions · CI/CD Quest</option>
             </select>
             <p id="block-note" class="privacy-note">Cada bloque guarda su propio avance.</p>
             <h1 id="welcome-title">¿Está listo tu entorno para desplegar?</h1>
@@ -72,6 +73,8 @@
           <div class="progress-track" role="progressbar" aria-label="Progreso del diagnóstico" aria-valuemin="0" aria-valuemax="24" aria-valuenow="0">
             <span id="progress-fill"></span>
           </div>
+          <div class="game-status" aria-live="polite"><span id="streak-copy">🔥 Racha: 0</span><span id="milestone-copy">Próximo hito: 10</span></div>
+          <div id="celebration-layer" class="celebration-layer" aria-hidden="true"></div>
 
           <div class="question-layout">
             <section class="question-card" aria-labelledby="question-title">

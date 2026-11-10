@@ -39,3 +39,18 @@ test("el contrato del bot acepta diccionarios y rechaza el formato del bloque de
   assert.equal(validateJsonAnswer('{}', {}).correct, true);
   assert.equal(validateJsonAnswer('null', {}).correct, false);
 });
+
+test("el módulo Vercel contiene 50 desafíos, diez misiones y contenido evaluable", () => {
+  const vercel = blocks.find(b => b.id === "vercel");
+  assert.equal(vercel.questions.length, 50);
+  assert.equal(Object.keys(vercel.topics).length, 10);
+  for (const topic of Object.keys(vercel.topics)) assert.equal(vercel.questions.filter(q => q.topic === topic).length, 5);
+  for (const q of vercel.questions) {
+    assert.ok(q.lesson.length > 20, `${q.id}: lesson`);
+    assert.ok(q.explanation.length > 20, `${q.id}: explanation`);
+    if (q.type === "choice") assert.ok(q.options.includes(q.answer), q.id);
+    else if (q.type === "terminal") assert.ok(q.answers.length, q.id);
+    else if (q.type === "sequence") assert.deepEqual([...q.items].sort(), [...q.shuffled].sort(), q.id);
+    else assert.fail(`${q.id}: tipo inesperado`);
+  }
+});

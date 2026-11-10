@@ -40,6 +40,8 @@ const elements = {
   print: document.querySelector("#print-button")
 };
 
+const praise = ["¡Excelente!", "¡Impecable!", "¡Gran lectura!", "¡Pipeline power!", "¡Eso es!", "¡Nivel desbloqueado!", "¡Respuesta de arquitecto/a!"];
+
 let state = freshState();
 
 function freshState(questionIds = questions.map(({ id }) => id)) {
@@ -50,6 +52,7 @@ function freshState(questionIds = questions.map(({ id }) => id)) {
     attempts: {},
     hintUsed: {},
     points: {},
+    streak: 0,
     completed: false
   };
 }
@@ -172,6 +175,9 @@ function updateQuizHeader() {
   elements.progress.setAttribute("aria-valuemax", String(total));
   elements.progress.setAttribute("aria-valuenow", String(answered));
   elements.progressFill.style.width = `${(answered / total) * 100}%`;
+  document.querySelector("#streak-copy").textContent = `🔥 Racha: ${state.streak || 0}`;
+  const nextMilestone = Math.min(total, Math.ceil((answered + 1) / 10) * 10);
+  document.querySelector("#milestone-copy").textContent = answered === total ? "🏆 Recorrido completo" : `Próximo hito: ${nextMilestone}`;
 }
 
 function renderAnswer(question, disabled) {
@@ -315,14 +321,18 @@ function checkAnswer() {
   if (evaluation.correct) {
     const fullPoints = state.attempts[question.id] === 1 && !state.hintUsed[question.id];
     state.points[question.id] = fullPoints ? 2 : 1;
+    state.streak = (state.streak || 0) + 1;
     save();
     updateQuizHeader();
     elements.console.textContent += `\n\n✓ desafío resuelto`;
-    showFeedback(question.explanation, "success", fullPoints ? "Correcto al primer intento." : "Correcto con ayuda.");
+    const heading = fullPoints ? `${praise[Math.floor(Math.random() * praise.length)]} +2 puntos` : "¡Bien remontado! +1 punto";
+    showFeedback(question.explanation, "success", heading);
+    celebrate(Object.keys(state.points).length % 10 === 0 ? "milestone" : "success");
     lockQuestion();
     return;
   }
 
+  state.streak = 0;
   save();
   elements.console.textContent += `\n\n✗ la verificación encontró un problema`;
   const message = evaluation.message
@@ -355,10 +365,25 @@ function useHint() {
 function revealAnswer() {
   const question = currentQuestion();
   state.points[question.id] = 0;
+  state.streak = 0;
   save();
   updateQuizHeader();
   showFeedback(question.explanation, "reveal", "Respuesta revisada.");
   lockQuestion();
+}
+
+function celebrate(kind) {
+  const layer = document.querySelector("#celebration-layer");
+  if (!layer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const count = kind === "milestone" ? 42 : 16;
+  for (let index = 0; index < count; index += 1) {
+    const piece = document.createElement("i");
+    piece.style.setProperty("--x", `${Math.random() * 100}vw`);
+    piece.style.setProperty("--delay", `${Math.random() * 180}ms`);
+    piece.style.setProperty("--hue", `${Math.floor(Math.random() * 360)}`);
+    layer.append(piece);
+    piece.addEventListener("animationend", () => piece.remove());
+  }
 }
 
 function lockQuestion() {
@@ -397,6 +422,7 @@ function renderResults() {
   const maximum = state.questionIds.length * maxPointsPerQuestion;
   const percent = Math.round((earned / maximum) * 100);
   const perTopic = topicResults();
+  celebrate("milestone");
 
   let title = "Tenés una base para seguir construyendo";
   let summary = "El diagnóstico señaló algunos conceptos para reforzar. No es una nota: es un mapa para decidir dónde practicar.";

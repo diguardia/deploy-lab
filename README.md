@@ -22,6 +22,7 @@ npm test
 
 - **Clases 1–4:** 24 desafíos, seis por eje temático; conserva el avance previo.
 - **Bot de casas:** 30 desafíos, cinco por etapa: orientación en el repo, Node.js/npm, datos/TypeScript, estrategia, HTTP y pruebas. Duración orientativa: 45–60 minutos, con posibilidad de continuar en otra sesión.
+- **Vercel + GitHub Actions:** 50 desafíos en diez misiones sobre CI/CD, runners, artefactos, serverless, secrets, Preview/Production, observabilidad, seguridad, rollback y diagnóstico. Incluye rachas, hitos y celebraciones visuales.
 - El nuevo bloque incluye explicaciones previas, fragmentos del código y repeticiones con variaciones. No requiere ejecutar el bot ni conocer previamente TypeScript.
 - Combina consola simulada, opciones, edición de JSON y ordenamiento de pasos.
 - Otorga 2 puntos por un acierto inicial, 1 con ayuda y 0 al revelar la respuesta.
